@@ -63,6 +63,93 @@ const CandlestickChart = ({
     fetchOHLCData(newPeriod);
   };
 
+  //   useEffect(() => {
+  //     const container = chartContainerRef.current;
+  //     if (!container) return;
+
+  //     const showTime = ["daily", "weekly", "monthly"].includes(period);
+
+  //     const chart = createChart(container, {
+  //       ...getChartConfig(height, showTime),
+  //       width: container.clientWidth,
+  //     });
+  //     const series = chart.addSeries(CandlestickSeries, getCandlestickConfig());
+
+  //     const convertedToSeconds = ohlcData.map(
+  //       (item) =>
+  //         [
+  //           Math.floor(item[0] / 1000),
+  //           item[1],
+  //           item[2],
+  //           item[3],
+  //           item[4],
+  //         ] as OHLCData
+  //     );
+
+  //     series.setData(convertOHLCData(convertedToSeconds));
+  //     chart.timeScale().fitContent();
+
+  //     chartRef.current = chart;
+  //     candleSeriesRef.current = series;
+
+  //     const observer = new ResizeObserver((entries) => {
+  //       if (!entries.length) return;
+  //       chart.applyOptions({ width: entries[0].contentRect.width });
+  //     });
+  //     observer.observe(container);
+
+  //     return () => {
+  //       observer.disconnect();
+  //       chart.remove();
+  //       chartRef.current = null;
+  //       candleSeriesRef.current = null;
+  //     };
+  //   }, [height, ohlcData, period]);
+
+  //   useEffect(() => {
+  //     if (!candleSeriesRef.current) return;
+
+  //     const convertedToSeconds = ohlcData.map(
+  //       (item) =>
+  //         [
+  //           Math.floor(item[0] / 1000),
+  //           item[1],
+  //           item[2],
+  //           item[3],
+  //           item[4],
+  //         ] as OHLCData
+  //     );
+
+  //     let merged: OHLCData[];
+
+  //     if (liveOhlcv) {
+  //       const liveTimestamp = liveOhlcv[0];
+
+  //       const lastHistoricalCandle =
+  //         convertedToSeconds[convertedToSeconds.length - 1];
+
+  //       if (lastHistoricalCandle && lastHistoricalCandle[0] === liveTimestamp) {
+  //         merged = [...convertedToSeconds.slice(0, -1), liveOhlcv];
+  //       } else {
+  //         merged = [...convertedToSeconds, liveOhlcv];
+  //       }
+  //     } else {
+  //       merged = convertedToSeconds;
+  //     }
+
+  //     merged.sort((a, b) => a[0] - b[0]);
+
+  //     const converted = convertOHLCData(merged);
+  //     candleSeriesRef.current.setData(converted);
+
+  //     const dataChanged = prevOhlcDataLength.current !== ohlcData.length;
+
+  //     if (dataChanged || mode === "historical") {
+  //       chartRef.current?.timeScale().fitContent();
+  //       prevOhlcDataLength.current = ohlcData.length;
+  //     }
+  //   }, [ohlcData, period, liveOhlcv, mode]);
+
   useEffect(() => {
     const container = chartContainerRef.current;
     if (!container) return;
@@ -73,21 +160,8 @@ const CandlestickChart = ({
       ...getChartConfig(height, showTime),
       width: container.clientWidth,
     });
+
     const series = chart.addSeries(CandlestickSeries, getCandlestickConfig());
-
-    const convertedToSeconds = ohlcData.map(
-      (item) =>
-        [
-          Math.floor(item[0] / 1000),
-          item[1],
-          item[2],
-          item[3],
-          item[4],
-        ] as OHLCData
-    );
-
-    series.setData(convertOHLCData(convertedToSeconds));
-    chart.timeScale().fitContent();
 
     chartRef.current = chart;
     candleSeriesRef.current = series;
@@ -96,6 +170,7 @@ const CandlestickChart = ({
       if (!entries.length) return;
       chart.applyOptions({ width: entries[0].contentRect.width });
     });
+
     observer.observe(container);
 
     return () => {
@@ -104,7 +179,7 @@ const CandlestickChart = ({
       chartRef.current = null;
       candleSeriesRef.current = null;
     };
-  }, [height, ohlcData, period]);
+  }, [height, period]);
 
   useEffect(() => {
     if (!candleSeriesRef.current) return;
@@ -124,7 +199,6 @@ const CandlestickChart = ({
 
     if (liveOhlcv) {
       const liveTimestamp = liveOhlcv[0];
-
       const lastHistoricalCandle =
         convertedToSeconds[convertedToSeconds.length - 1];
 
@@ -139,8 +213,7 @@ const CandlestickChart = ({
 
     merged.sort((a, b) => a[0] - b[0]);
 
-    const converted = convertOHLCData(merged);
-    candleSeriesRef.current.setData(converted);
+    candleSeriesRef.current.setData(convertOHLCData(merged));
 
     const dataChanged = prevOhlcDataLength.current !== ohlcData.length;
 
@@ -148,7 +221,7 @@ const CandlestickChart = ({
       chartRef.current?.timeScale().fitContent();
       prevOhlcDataLength.current = ohlcData.length;
     }
-  }, [ohlcData, period, liveOhlcv, mode]);
+  }, [ohlcData, liveOhlcv, mode]);
 
   return (
     <div id="candlestick-chart">
