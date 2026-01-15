@@ -27,7 +27,8 @@ const Categories = async () => {
         header: "24h Change",
         cellClassName: "change-header-cell",
         cell: (category) => {
-          const isTrendingUp = category.market_cap_change_24h > 0;
+          const change = category.market_cap_change_24h ?? 0;
+          const isTrendingUp = change > 0;
 
           return (
             <div
@@ -37,7 +38,7 @@ const Categories = async () => {
               )}
             >
               <p className="flex items-center">
-                {formatPercentage(category.market_cap_change_24h)}
+                {formatPercentage(change)}
                 {isTrendingUp ? (
                   <TrendingUp width={16} height={16} />
                 ) : (
