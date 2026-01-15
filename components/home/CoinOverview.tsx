@@ -26,9 +26,7 @@ const CoinOverview = async () => {
           data={coinOHLCData}
           coinId="bitcoin"
           liveInterval={"1s"}
-          setLiveInterval={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          setLiveInterval={() => {}}
         >
           <div className="header pt-2">
             <Image
