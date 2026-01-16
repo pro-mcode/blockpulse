@@ -50,5 +50,4 @@ const CoinOverview = async () => {
     return <CoinOverviewFallback />;
   }
 };
-
 export default CoinOverview;
