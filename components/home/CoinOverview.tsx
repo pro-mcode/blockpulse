@@ -25,8 +25,11 @@ const CoinOverview = async () => {
         <CandlestickChart
           data={coinOHLCData}
           coinId="bitcoin"
+          mode="historical"
           liveInterval={"1s"}
-          setLiveInterval={() => {}}
+          // setLiveInterval={function (): void {
+          //   throw new Error("Function not implemented.");
+          // }}
         >
           <div className="header pt-2">
             <Image
@@ -50,4 +53,5 @@ const CoinOverview = async () => {
     return <CoinOverviewFallback />;
   }
 };
+
 export default CoinOverview;
