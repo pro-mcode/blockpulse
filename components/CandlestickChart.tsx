@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -34,7 +35,7 @@ const CandlestickChart = ({
   const prevOhlcDataLength = useRef<number>(data?.length || 0);
 
   const [period, setPeriod] = useState(initialPeriod);
-  const [ohlcData, setOhlcData] = useState<OHLCData[]>(data ?? []);
+  const [ohlcData, setOhlcData] = useState<OHLCData[] | OHLCData>(data ?? []);
   const [isPending, startTransition] = useTransition();
 
   const fetchOHLCData = async (selectedPeriod: Period) => {
@@ -76,7 +77,7 @@ const CandlestickChart = ({
     const series = chart.addSeries(CandlestickSeries, getCandlestickConfig());
 
     const convertedToSeconds = ohlcData.map(
-      (item) =>
+      (item: number | any) =>
         [
           Math.floor(item[0] / 1000),
           item[1],
@@ -110,7 +111,7 @@ const CandlestickChart = ({
     if (!candleSeriesRef.current) return;
 
     const convertedToSeconds = ohlcData.map(
-      (item) =>
+      (item: number | any) =>
         [
           Math.floor(item[0] / 1000),
           item[1],
