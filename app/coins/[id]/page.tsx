@@ -94,7 +94,7 @@ const Page = async ({ params }: NextPageProps) => {
 
                 {link ? (
                   <div className="link">
-                    <Link href={link} target="_blank">
+                    <Link href={link} rel="noopener noreferrer" target="_blank">
                       {linkText || label}
                     </Link>
                     <ArrowUpRight size={16} />
